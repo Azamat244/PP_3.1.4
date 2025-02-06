@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit user</title>
+</head>
+<body>
+
+<div>
+
+    <form th:method="POST" th:action="@{/admin/edit}" th:object="${user}">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="username">Enter name</label>
+        <input type="text" th:field="*{username}" id="username">
+        <p style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name error</p>
+        <br>
+        <label for="password"> Enter password</label>
+        <input type="password" th:field="*{password}" id="password">
+        <p style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</p>
+        <br>
+        <label for="lastname">Enter Lastname</label>
+        <input type="text" th:field="*{lastname}" id="lastName">
+        <p style="color: red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Name error</p>
+        <br>
+        <label for="age">Enter Age</label>
+        <input type="text" th:field="*{age}" id="age">
+        <p style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</p>
+        <br>
+
+        <p>
+            <label>Roles:</label>
+        <div th:each="role : ${roles}">
+            <input type="checkbox" name="roles"
+                   th:value="${role.id}"
+                   th:text="${role.name}"
+                   th:field="*{roles}"/>
+        </div>
+        </p>
+        <input type="submit" value="Обновить">
+    </form>
+    <!--
+                <input type="checkbox"> - создаем чекбокс для каждой роли.
+                Атрибут "name" задает имя поля, через которое будет отправляться значение (все выбранные роли будут отправлены с ключом "roles").
+                th:value="${role.id}" - это значение, которое будет отправлено при выборе роли. Оно будет равно id этой роли.
+                th:text="${role.name}" - это текст, который будет отображаться рядом с чекбоксом, например, название роли.
+                th:field="*{roles}" - связывает поле с полем "roles" объекта "user" в модели, чтобы при отправке формы выбранные роли автоматически привязывались к объекту "user".
+            -->
+
+
+</div>
+<br>
+<hr>
+</body>
+</html>

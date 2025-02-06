@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User info</title>
+</head>
+<h1>Информация о пользователе </h1>
+<body>
+<h1>Профиль пользователя <span th:text="${user.username}"></span> </h1>
+
+<p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+<p><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></p>
+<p><strong>Пароль:</strong> <span th:text="${user.password}"></span></p>
+<p><strong>Фамилия пользователя:</strong> <span th:text="${user.lastname}"></span></p>
+<p><strong>Возраст:</strong> <span th:text="${user.age}"></span></p>
+<p><strong>Роль:</strong> <span th:text="${user.roles}"></span></p>
+
+<a th:href="@{/admin/edit/{id}(id=${user.id})}"> Редактировать </a>
+<form th:action="@{/admin/delete/{id}(id=${user.id})}" method="post">
+
+    <button type="submit">Удалить</button>
+</form>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Выйти</button>
+</form>
+
+</body>
+</html>
