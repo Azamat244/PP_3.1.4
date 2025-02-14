@@ -2,12 +2,35 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
     <title>Гостевая страница</title>
 </head>
 <body>
 Привет!
 <hr>
 <a th:href="@{/login}">Войти</a>
+<hr>
+<div style="background: lightblue;">
+    <p>Текст в div</p>
+</div>
+<p>Простой текст</p>
+<p><b>Жирный текст</b></p>
+<p><em>Наклонный текст </em></p>
+<p style="color: red"> Это красный цвет </p>
+
+<p>Выделенное <span style="color: red;">слово</span> в тексте.</p>
+
+<table>
+    <thead>
+    <th>ID</th>
+    <th>Имя пользователя</th>
+    </thead>
+    <td>1</td>
+    <td>Игорь</td>
+    <tbody>
+
+    </tbody>
+</table>
 
 </body>
 </html>

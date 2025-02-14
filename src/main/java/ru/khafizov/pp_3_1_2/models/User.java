@@ -10,8 +10,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +32,11 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column (name = "email")
+    @NotBlank( message = "Поле не должно быть пустым")
+    @Email(message = "Некорректный формат e-mail")
+    private String email;
 
     @Column(name = "username")
     @NotEmpty(message = "Поле не должно быть пустым")
@@ -52,7 +59,7 @@ public class User implements UserDetails {
     private int age;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable( // автоматически созданная промежуточная таблица
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -64,11 +71,12 @@ public class User implements UserDetails {
 
     }
 
-    public User(int age, String lastname, String password, String username) {
+    public User(int age, String email, String lastname, String password, String username) {
         this.age = age;
         this.lastname = lastname;
         this.password = password;
         this.username = username;
+        this.email = email;
     }
 
     public Integer getId() {
@@ -110,6 +118,14 @@ public class User implements UserDetails {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<Role> getRoles() {

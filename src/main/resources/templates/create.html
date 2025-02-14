@@ -26,15 +26,16 @@
         <input type="text" th:field="*{age}" id="age">
         <p style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Name error</p>
         <br>
-
         <p>
             <label>Roles:</label>
         <div th:each="role : ${allRoles}">
-            <input type="checkbox" name="roles"
+            <input type="checkbox"
+                   name="roles"
                    th:value="${role.id}"
                    th:text="${role.name}"
                    th:field="*{roles}"/>
-        </div>
+
+    </div>
         </p>
         <input type="submit" value="Создать">
     </form>
