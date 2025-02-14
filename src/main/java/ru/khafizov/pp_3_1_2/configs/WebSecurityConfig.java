@@ -33,8 +33,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers("/").permitAll()
 
+
                 )
                 .formLogin(form -> form //логика перенаправления после успешной аутентификации
+                        .loginPage("/login")
+                        .loginProcessingUrl("/auth")
+                        .usernameParameter("email")
                         .successHandler(successUserHandler)
                         .permitAll()
                 )

@@ -17,11 +17,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { //SpringSecurity, использует именно этот метод при авторизации чтобы получить UserDetails
-        User user = userRepositoriy.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { //SpringSecurity, использует именно этот метод при авторизации чтобы получить UserDetails
+        User user = userRepositoriy.findByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User " + username + " not found");
+            throw new UsernameNotFoundException("User " + email + " not found");
         }
         return user;
     }

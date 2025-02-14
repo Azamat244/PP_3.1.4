@@ -32,10 +32,15 @@ public class UserServiceImpl implements UserService {
         return userRepositoriy.findByUsername(username);
     }
 
+    @Override
+    public User findByEmail(String email){
+        return userRepositoriy.findByEmail(email);
+    }
+
 
     @Override
     public void save(User user) {
-        if (userRepositoriy.findByUsername(user.getUsername()) != null) {
+        if (findByEmail(user.getEmail()) != null) {
             throw new RuntimeException("Пользователь с таким именем уже существует");
         }
         user.setPassword(encoderConfig.passwordEncoder().encode((user.getPassword())));
@@ -62,6 +67,7 @@ public class UserServiceImpl implements UserService {
         existUser.setLastname(updateUser.getLastname());
         existUser.setAge(updateUser.getAge());
         existUser.setRoles(updateUser.getRoles());
+        existUser.setEmail(updateUser.getEmail());
 
         if (!updateUser.getPassword().isEmpty() && !updateUser.getPassword().equals(existUser.getPassword())) {
             existUser.setPassword(updateUser.getPassword());
@@ -72,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void validateUser(User user) {
-        User exitingUser = findByUsername(user.getUsername());
+        User exitingUser = findByEmail(user.getEmail());
         if (exitingUser != null && !exitingUser.getId().equals(user.getId())) {
             throw new RuntimeException("Пользователь с таким именем уже существует");
         }

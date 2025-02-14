@@ -18,6 +18,10 @@
         <input type="password" th:field="*{password}" id="password">
         <p style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</p>
         <br>
+        <label for="email">Enter E-mail</label>
+        <input type="text" th:field="*{email}" id="email">
+        <p style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</p>
+        <br>
         <label for="lastname">Enter Lastname</label>
         <input type="text" th:field="*{lastname}" id="lastName">
         <p style="color: red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Name error</p>

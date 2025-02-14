@@ -45,7 +45,10 @@
 
             <td>
                 <div class="text-end">
-                    <a th:href="@{/logout}" class="btn btn-outline-secondary"> Выйти </a>
+                    <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-outline-secondary">Выйти</button>
+                    </form>
                 </div>
             </td>
         </tr>
@@ -85,7 +88,8 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Имя</th>
-                                            <th>Фамилия пользователя</th>
+                                            <th>Фамилия</th>
+                                            <th>E-mail</th>
                                             <th>Возраст</th>
                                             <th>Роль</th>
                                             <th>Edit</th>
@@ -97,15 +101,16 @@
                                             <td th:text="${user2.id}"></td>
                                             <td th:text="${user2.username}"></td>
                                             <td th:text="${user2.lastname}"></td>
+                                            <td th:text="${user2.email}"></td>
                                             <td th:text="${user2.age}"></td>
                                             <td th:text="${user2.roles}"></td>
                                             <td>
-                                                <form th:action="@{/admin/edit/{id}(id=${user2.id})}" method="post">
+                                                <form th:action="@{/admin/edit/{id}(id=${user2.id})}" method="get">
                                                     <button type="submit" class="btn btn-primary">Edit</button>
                                                 </form>
                                             </td>
                                             <td>
-                                                <form th:action="@{/admin/delete/{id}(id=${user2.id})}" method="post">
+                                                <form th:action="@{/admin/delete/{id}(id=${user2.id})}" method="POST">
                                                     <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>

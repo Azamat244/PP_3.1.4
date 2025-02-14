@@ -18,4 +18,6 @@ public interface UserService {
     void deleteById(Integer id);
 
     void updateUser(User updateUser);
+
+    User findByEmail(String email);
 }
