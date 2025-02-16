@@ -30,13 +30,17 @@ public class DataInitializer {
             roleRepository.save(new Role("ROLE_ADMIN"));
         }
 
-        if (userRepositoriy.findByUsername("admin") == null) {
+        if (userRepositoriy.findByEmail("admin@mail.ru") == null) {
             Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-            User admin = new User(20,"admin@mail.ru","admin", encoderConfig.passwordEncoder().encode("100"), "admin");
+            User admin = new User(20, "admin@mail.ru", "admin", encoderConfig.passwordEncoder().encode("100"), "admin");
             admin.setRoles(Set.of(adminRole));
             userRepositoriy.save(admin);
-
-
+        }
+        if (userRepositoriy.findByUsername("user@mail.ru") == null) {
+            Role userRole = roleRepository.findByName("ROLE_USER");
+            User user = new User(20, "user@mail.ru", "user", encoderConfig.passwordEncoder().encode("100"), "user");
+            user.setRoles(Set.of(userRole));
+            userRepositoriy.save(user);
         }
     }
 

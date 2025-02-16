@@ -44,7 +44,10 @@
 
             <td>
                 <div class="text-end">
-                    <a th:href="@{/logout}" class="btn btn-outline-secondary"> Выйти </a>
+                    <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-outline-secondary">Выйти</button>
+                    </form>
                 </div>
             </td>
         </tr>

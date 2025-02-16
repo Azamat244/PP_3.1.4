@@ -36,6 +36,8 @@ public class AdminController {
         User user = userService.findByUsername(principal.getName());
         model.addAttribute("users", users);
         model.addAttribute("userName", user);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("allRoles", roleService.findAll());
         return "adminPage";
     }
 
