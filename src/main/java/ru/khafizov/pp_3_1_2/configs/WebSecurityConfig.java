@@ -7,7 +7,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.khafizov.pp_3_1_2.security.UserDetailServiceImpl;
 import ru.khafizov.pp_3_1_2.services.UserServiceImpl;
 
 
@@ -16,13 +15,13 @@ import ru.khafizov.pp_3_1_2.services.UserServiceImpl;
 public class WebSecurityConfig {
     private final SuccessUserHandler successUserHandler;
     private final EncoderConfig encoderConfig;
-    private final UserDetailServiceImpl userDetailServiceImpl;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserServiceImpl userServiceImpl, EncoderConfig encoderConfig, UserDetailServiceImpl userDetailServiceImpl) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, EncoderConfig encoderConfig, UserServiceImpl userServiceImpl) {
         this.successUserHandler = successUserHandler;
         this.encoderConfig = encoderConfig;
-        this.userDetailServiceImpl = userDetailServiceImpl;
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Bean
@@ -44,7 +43,7 @@ public class WebSecurityConfig {
                 )
                 .logout(logout -> logout //логика логаута
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login")
                         .permitAll()
                 )
                 .build();
@@ -55,7 +54,7 @@ public class WebSecurityConfig {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(encoderConfig.passwordEncoder());
-        authenticationProvider.setUserDetailsService(userDetailServiceImpl);
+        authenticationProvider.setUserDetailsService(userServiceImpl);
         return authenticationProvider;
     }
 }

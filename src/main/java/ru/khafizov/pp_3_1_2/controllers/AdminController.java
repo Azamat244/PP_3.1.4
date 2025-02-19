@@ -41,67 +41,16 @@ public class AdminController {
         return "adminPage";
     }
 
-    @GetMapping("/userInfo/{id}")
-    public String userInfo(@PathVariable("id") Integer id, Model model) {
-        User user = userService.findById(id);
-        model.addAttribute("user", user);
-        return "showInfoForAdmin";
-    }
-
-    @GetMapping("/user/create") //страница создания пользователя.
-    public String createPage(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        List<Role> roles = roleService.findAll();
-        model.addAttribute("allRoles", roles);
-        return "create";
-    }
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") @Valid User user,
-                           BindingResult bindingResult,
-                           Model model) {
-        if (bindingResult.hasErrors()) {
-            List<Role> roles = roleService.findAll();
-            model.addAttribute("allRoles", roles);
-            return "create";
-        } else {
-            try {
-                userService.save(user);
-            } catch (RuntimeException e) {
-                bindingResult.rejectValue("username", "error.user", e.getMessage());
-                List<Role> roles = roleService.findAll();
-                model.addAttribute("allRoles", roles);
-                return "/create";
-            }
-            return "redirect:/admin";
-        }
-    }
-
-
-    //страница где будет показана информация о пользователе с возможностью обновления и удаления
-    @GetMapping("/edit/{id}")
-    public String getEditForm(@PathVariable("id") Integer id, Model model) {
-        User user = userService.findById(id);
-        List<Role> roles = roleService.findAll();
-        model.addAttribute("user", user);
-        model.addAttribute("roles", roles);
-        return "editPage";
-
-
+    public String saveUser(@ModelAttribute("user") User user, Model model) {
+        userService.save(user);
+        return "redirect:/admin";
     }
 
     @PostMapping("/edit")
-    public String editUser(@ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
-        try {
-            userService.validateUser(user);
-        } catch (RuntimeException e) {
-            bindingResult.rejectValue("username", "error.user", e.getMessage());
-        }
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("roles", roleService.findAll());
-            return "editPage";
-        }
+    public String editUser(@ModelAttribute("user") User user, Model model) {
+        userService.validateUser(user);
         userService.updateUser(user);
         return "redirect:/admin";
     }

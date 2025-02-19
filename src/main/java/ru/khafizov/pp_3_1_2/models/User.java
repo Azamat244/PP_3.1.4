@@ -33,27 +33,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column (name = "email")
+
     @NotBlank( message = "Поле не должно быть пустым")
     @Email(message = "Некорректный формат e-mail")
     private String email;
 
-    @Column(name = "username")
+
     @NotEmpty(message = "Поле не должно быть пустым")
     @Size(min = 2, max = 30, message = "Длина имени должна быть больше 1 и меньше 30")
     private String username;
 
     @NotEmpty(message = "Поле не должно быть пустым")
     @Size(min = 3, message = "Длина пароля должна быть больше 1")
-    @Column(name = "password")
+
     private String password;
 
-    @Column(name = "lastname")
+
     @NotEmpty(message = "Поле не должно быть пустым")
     @Size(min = 2, max = 30, message = "Длина фамилии должна быть больше 1 и меньше 30")
     private String lastname;
 
-    @Column(name = "age")
+
     @Min(value = 18)
     @Max(value = 100)
     private int age;

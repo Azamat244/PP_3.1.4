@@ -5,6 +5,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.khafizov.pp_3_1_2.configs.EncoderConfig;
 import ru.khafizov.pp_3_1_2.models.User;
@@ -15,7 +18,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepositoriy userRepositoriy;
     private final EncoderConfig encoderConfig;
@@ -26,6 +29,16 @@ public class UserServiceImpl implements UserService {
         this.encoderConfig = encoderConfig;
     }
 
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { //SpringSecurity, использует именно этот метод при авторизации чтобы получить UserDetails
+        User user = userRepositoriy.findByEmail(email);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " not found");
+        }
+        return user;
+    }
 
     @Override
     public User findByUsername(String username) { //метод вне SpringSecurity, просто возвращает юзера по имени
