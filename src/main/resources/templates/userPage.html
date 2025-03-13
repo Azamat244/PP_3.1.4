@@ -11,17 +11,21 @@
         .custom-background {
             background-color: #f7f7f7;
         }
+
         .table-dark {
             margin-bottom: 0; /* Убирает внешний отступ снизу */
         }
+
         .container-fluid {
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
+
         .d-flex {
             margin-top: 0 !important;
             padding-top: 0 !important;
         }
+
         .rounded-table {
             border-radius: 10px;
             overflow: hidden; /* Обрезает углы, чтобы скругление применилось */
@@ -38,14 +42,16 @@
         <tr>
             <td>
                 <div class="container-fluid px-2 fs-2">
-                    <b th:text="${user.username}"></b> с ролью: <b th:text="${user.roles}"> </b>
+                    <span id="user-tab"></span>
                 </div>
             </td>
 
             <td>
                 <div class="text-end">
-                    <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
-                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                    <form id="logoutForm"
+                          action="/logout"
+                          method="POST"
+                          style="display: inline;">
                         <button type="submit" class="btn btn-outline-secondary">Выйти</button>
                     </form>
                 </div>
@@ -58,8 +64,7 @@
 
         <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab"
            aria-controls="v-pills-home" aria-selected="true">
-
-            <div class="pe-5" th:text="${user.username}"></div>
+            <p> User </p>
         </a>
 
     </div>
@@ -68,12 +73,12 @@
         <div class="tab-content flex-grow-1 mx-5 p-0" id="v-pills-tabContent">
             <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <div>
-                    <div class="fs-1"> <p> Информационная панель </p></div>
+                    <div class="fs-1"><p> Информационная панель </p></div>
                     <div>
                         <table class="table rounded-table ">
                             <thead class="table-secondary ">
                             <tr>
-                                <th class="pl-3"> About user </th>
+                                <th class="pl-3"> About user</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -82,8 +87,9 @@
                                 <td>
                                     <table class="table table-striped table-hover me-0 ml-0 ">
                                         <thead>
-                                        <tr >
+                                        <tr>
                                             <th>ID</th>
+                                            <th>E-mail</th>
                                             <th>Имя</th>
                                             <th>Фамилия пользователя</th>
                                             <th>Возраст</th>
@@ -92,11 +98,12 @@
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td> <div th:text="${user.id}"> </div> </td>
-                                            <td> <div th:text="${user.username}"> </div> </td>
-                                            <td> <div th:text="${user.lastname}"> </div> </td>
-                                            <td> <div th:text="${user.age}"> </div> </td>
-                                            <td> <div th:text="${user.roles}"> </div> </td>
+                                            <td id="userId"></td>
+                                            <td id="userEmail"></td>
+                                            <td id="userName"></td>
+                                            <td id="userLastName"></td>
+                                            <td id="userAge"></td>
+                                            <td id="userRoles"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -117,5 +124,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+
+<script src="/forUser.js"></script>
 </body>
 </html>

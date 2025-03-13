@@ -24,16 +24,30 @@ public class WebSecurityConfig {
         this.userServiceImpl = userServiceImpl;
     }
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        return http
+//
+//                .authorizeHttpRequests(auth -> auth
+//                        .anyRequest().permitAll() // Разрешить всем доступ ко всему
+//                )
+//                .csrf(csrf -> csrf.disable()) // Отключить CSRF (если нужно)
+//                .build();
+//    }
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.
                 authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/static/**","/forUser.js").permitAll()
 
 
                 )
+                .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form //логика перенаправления после успешной аутентификации
                         .loginPage("/login")
                         .loginProcessingUrl("/auth")

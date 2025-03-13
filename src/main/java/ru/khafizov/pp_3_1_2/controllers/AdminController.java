@@ -1,14 +1,15 @@
 package ru.khafizov.pp_3_1_2.controllers;
 
-import jakarta.validation.Valid;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.khafizov.pp_3_1_2.models.Role;
 import ru.khafizov.pp_3_1_2.models.User;
 import ru.khafizov.pp_3_1_2.services.RoleService;
@@ -18,7 +19,7 @@ import java.security.Principal;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -30,34 +31,47 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping  //админ-панель где выводятся все юзеры
-    public String admin(Model model, Principal principal) {
-        List<User> users = userService.findAll();
+
+    @GetMapping("/loggedUser")
+    public ResponseEntity<User> getLoggerUser(Principal principal) {
         User user = userService.findByUsername(principal.getName());
-        model.addAttribute("users", users);
-        model.addAttribute("userName", user);
-        model.addAttribute("newUser", new User());
-        model.addAttribute("allRoles", roleService.findAll());
-        return "adminPage";
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
-    @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user, Model model) {
+    @GetMapping("/users/roles")
+    public ResponseEntity<List<Role>> getRoles() {
+        List<Role> roles = roleService.findAll();
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Integer id) {
+        User user = userService.findById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
         userService.save(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/edit")
-    public String editUser(@ModelAttribute("user") User user, Model model) {
-        userService.validateUser(user);
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
         userService.updateUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Integer id) {
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Integer id) {
         userService.deleteById(id);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
+
 }
