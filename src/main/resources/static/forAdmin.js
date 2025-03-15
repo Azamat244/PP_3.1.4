@@ -124,6 +124,12 @@ document.getElementById('new-user-form').addEventListener('submit', function (ev
                 alert('Пользователь успешно создан!');
                 this.reset();
                 // closeModal('newUserPopup');
+
+                const usersTab = document.getElementById('show-users-table');
+                if (usersTab) {
+                    usersTab.click();
+                }
+
             } else {
                 return response.json().then(data => {
                     throw new Error(data.message || 'Не удалось создать пользователя');
