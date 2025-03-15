@@ -6,8 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.khafizov.pp_3_1_2.models.User;
 
-import java.util.Optional;
-
 
 @Repository
 public interface UserRepositoriy extends JpaRepository<User, Integer> {

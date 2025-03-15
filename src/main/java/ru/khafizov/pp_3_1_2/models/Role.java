@@ -1,12 +1,9 @@
 package ru.khafizov.pp_3_1_2.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,11 +23,11 @@ public class Role implements GrantedAuthority {
     private String name;
 
     @ManyToMany
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "roles_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+//    @JoinTable(
+//            name = "user_roles",
+//            joinColumns = @JoinColumn(name = "roles_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
     private Set<User> users;
 
     public Role() {

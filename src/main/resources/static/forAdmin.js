@@ -7,40 +7,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Функция для получения и отображения текущего пользователя
 function fetchLoggedUser() {
-    console.log('Fetching authorized user info...');
-    fetch('/admin/loggedUser')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch authorized user info');
-            }
-            return response.json();
-        })
+    fetch("/admin/loggedUser")
+        .then(response => response.json())
         .then(user => {
-            console.log('Authorized user fetched:', user);
-            const emailSpan = document.getElementById('loggedUserEmail');
-            const roleSpan = document.getElementById('loggedUserRole');
-            emailSpan.textContent = user.email;
-            roleSpan.textContent = user.roles.map(role => role.name.substring(5)).join(', ');
+            document.getElementById("userId1").textContent = user.id;
+            document.getElementById("userEmail1").textContent = user.email;
+            document.getElementById("userEmail2").textContent = user.email;
+            document.getElementById("userName1").textContent = user.username;
+            document.getElementById("userLastName1").textContent = user.lastname;
+            document.getElementById("userAge1").textContent = user.age;
+
+            let roles = user.authorities.map(role => role.authority.substring(5)).join(", ");
+            document.getElementById("userRoles1").textContent = roles;
+            document.getElementById("userRoles2").textContent = roles;
         })
-        .catch(error => {
-            console.error('Error fetching authorized user info:', error);
-        });
+        .catch(error => console.log("Ошибка загрузки пользователей: ", error))
 }
 
 // Функция для получения и отображения всех пользователей
 function fetchUsers() {
-    console.log('Fetching users for table...');
     fetch('/admin/users')
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch users');
-            }
+            if (!response.ok) throw new Error('Failed to fetch users');
             return response.json();
         })
         .then(response => {
-            console.log('Users for table fetched:', response);
             const tableBody = document.getElementById('users-table-body');
-            tableBody.innerHTML = ''; // Очищаем существующие строки
+            tableBody.innerHTML = '';
             response.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -49,7 +42,7 @@ function fetchUsers() {
                     <td>${user.lastname}</td>
                     <td>${user.age}</td>
                     <td>${user.email}</td>
-                    <td>${user.roles.map(role => role.name.substring(5)).join(', ')}</td> 
+                    <td>${user.roles.map(role => role.authority.substring(5)).join(', ')}</td>
                     <td><button class="btn btn-info" onclick="openEditUserModal(${user.id})">Edit</button></td>
                     <td><button class="btn btn-danger" onclick="openDeleteUserModal(${user.id})">Delete</button></td>
                 `;
@@ -57,36 +50,29 @@ function fetchUsers() {
             });
         })
         .catch(error => {
-            console.error('Error fetching users for table:', error);
+            console.error('Error fetching users:', error);
             alert('Ошибка при загрузке пользователей');
         });
 }
 
-// Функция для загрузки всех ролей и отображения их в селектах
+// Функция для загрузки ролей
 function loadRoles() {
-    console.log('Loading roles...');
     fetch('/admin/users/roles')
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch roles');
-            }
+            if (!response.ok) throw new Error('Failed to fetch roles');
             return response.json();
         })
         .then(roles => {
-            console.log('Roles fetched:', roles);
-            const roleSelect = document.getElementById('roles');
-            const editRoleSelect = document.getElementById('editRoles');
-            roleSelect.innerHTML = '';
-            editRoleSelect.innerHTML = '';
-            roles.forEach(role => {
-                const option = document.createElement('option');
-                option.value = role.id;
-                option.text = role.authority.substring(5);
-                roleSelect.appendChild(option);
-                const editOption = document.createElement('option');
-                editOption.value = role.id;
-                editOption.text = role.authority.substring(5);
-                editRoleSelect.appendChild(editOption);
+            // Заполняем все селекты с ролями
+            const roleSelects = document.querySelectorAll('#roles, #editRoles, #deleteRoles');
+            roleSelects.forEach(select => {
+                select.innerHTML = '';
+                roles.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.id;
+                    option.text = role.authority.substring(5);
+                    select.appendChild(option);
+                });
             });
         })
         .catch(error => {
@@ -95,13 +81,14 @@ function loadRoles() {
         });
 }
 
-// Обработчик отправки формы создания нового пользователя
+// Обработчик создания пользователя
 document.getElementById('new-user-form').addEventListener('submit', function (event) {
     event.preventDefault();
     const formData = new FormData(this);
     const rolesSelected = Array.from(document.getElementById('roles').selectedOptions).map(option => ({
         id: parseInt(option.value, 10)
     }));
+
     const user = {
         username: formData.get('firstName'),
         lastname: formData.get('lastName'),
@@ -110,59 +97,48 @@ document.getElementById('new-user-form').addEventListener('submit', function (ev
         password: formData.get('password'),
         roles: rolesSelected
     };
-    console.log('Creating user:', user);
+
     fetch('/admin/users', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     })
         .then(response => {
             if (response.ok) {
                 fetchUsers();
-                alert('Пользователь успешно создан!');
                 this.reset();
-                // closeModal('newUserPopup');
-
-                const usersTab = document.getElementById('show-users-table');
-                if (usersTab) {
-                    usersTab.click();
-                }
-
+                document.getElementById('show-users-table').click();
+                alert('Пользователь успешно создан!');
             } else {
-                return response.json().then(data => {
-                    throw new Error(data.message || 'Не удалось создать пользователя');
-                });
+                return response.json().then(data => { throw new Error(data.message) });
             }
         })
         .catch(error => {
-            console.error('Error creating user:', error);
-            alert('Ошибка при создании пользователя: ' + error.message);
+            console.error('Error:', error);
+            alert('Ошибка: ' + error.message);
         });
 });
 
 // Функция для открытия модального окна редактирования пользователя и заполнения формы
 function openEditUserModal(id) {
-    console.log('Opening edit modal for user ID:', id);
     fetch(`/admin/users/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch user');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(user => {
             console.log('User fetched for edit:', user);
+            // Заполняем основные поля
             document.getElementById('editUserId').value = user.id;
             document.getElementById('editFirstName').value = user.username;
             document.getElementById('editLastName').value = user.lastname;
             document.getElementById('editAge').value = user.age;
             document.getElementById('editEmail').value = user.email;
+
+            // Устанавливаем выбранные роли
             const editRolesSelect = document.getElementById('editRoles');
             Array.from(editRolesSelect.options).forEach(option => {
-                option.selected = user.roles.some(role => role.id === parseInt(option.value, 10));
+                option.selected = user.roles.some(role => role.id === parseInt(option.value, 10)
+                );
             });
+
             $('#editUserModal').modal('show');
         })
         .catch(error => {
@@ -216,7 +192,6 @@ document.getElementById('editUserForm').addEventListener('submit', function (eve
         });
 });
 
-
 // Функция для открытия модального окна удаления пользователя
 function openDeleteUserModal(id) {
     console.log('Opening delete modal for user ID:', id);
@@ -230,8 +205,8 @@ function openDeleteUserModal(id) {
         .then(user => {
             console.log('User fetched for delete:', user);
             document.getElementById('deleteUserId').value = user.id;
-            document.getElementById('deleteUsername').value = user.username;
-            document.getElementById('deleteSurname').value = user.lastname;
+            document.getElementById('deleteUsername').value = user.firstName;
+            document.getElementById('deleteSurname').value = user.lastName;
             document.getElementById('deleteAge').value = user.age;
             document.getElementById('deleteEmail').value = user.email;
             const deleteRolesSelect = document.getElementById('deleteRoles');

@@ -43,7 +43,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/user/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers("/**").permitAll()
-                        .requestMatchers("/static/**","/forUser.js").permitAll()
+                        .requestMatchers("/static/**", "/forUser.js").permitAll()
 
 
                 )

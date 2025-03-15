@@ -4,7 +4,6 @@ package ru.khafizov.pp_3_1_2.services;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findByEmail(String email){
+    public User findByEmail(String email) {
         return userRepositoriy.findByEmail(email);
     }
 
@@ -83,7 +82,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         existUser.setEmail(updateUser.getEmail());
 
         if (!updateUser.getPassword().isEmpty() && !updateUser.getPassword().equals(existUser.getPassword())) {
-            existUser.setPassword(updateUser.getPassword());
+            existUser.setPassword(encoderConfig.passwordEncoder().encode(updateUser.getPassword()));
         }
 
         userRepositoriy.save(existUser);

@@ -3,15 +3,12 @@ package ru.khafizov.pp_3_1_2.configs;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Set;
-
-
-import org.springframework.security.core.GrantedAuthority;
-
 import java.util.stream.Collectors;
 
 @Component

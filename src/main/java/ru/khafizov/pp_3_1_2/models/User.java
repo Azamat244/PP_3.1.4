@@ -1,6 +1,5 @@
 package ru.khafizov.pp_3_1_2.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +33,7 @@ public class User implements UserDetails {
     private Integer id;
 
 
-    @NotBlank( message = "Поле не должно быть пустым")
+    @NotBlank(message = "Поле не должно быть пустым")
     @Email(message = "Некорректный формат e-mail")
     private String email;
 
